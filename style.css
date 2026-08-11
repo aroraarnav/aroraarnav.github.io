@@ -24,11 +24,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper:  #191510;
-    --ink:    #ece2d0;
-    --accent: #e08a4c;
-    --rule:   #5c4f3f;
-    --hair:   #423829;
+    --paper:  #15181d;
+    --ink:    #dde2ea;
+    --accent: #7fa8dd;
+    --rule:   #3a424e;
+    --hair:   #2d343e;
   }
 }
 
