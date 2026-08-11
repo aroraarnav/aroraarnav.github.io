@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    g { stroke: #221c14; }
+    @media (prefers-color-scheme: dark) { g { stroke: #dde2ea; } }
+  </style>
+  <g fill="none" stroke-width="3.8" stroke-linecap="round">
+    <circle cx="32" cy="32" r="27.5"/>
+    <path d="M32 4.5v55"/>
+    <path d="M4.5 32h55"/>
+    <ellipse cx="32" cy="32" rx="13" ry="27.5"/>
+    <path d="M9.6 17.2Q32 23.4 54.4 17.2"/>
+    <path d="M9.6 46.8Q32 40.6 54.4 46.8"/>
+  </g>
+</svg>
