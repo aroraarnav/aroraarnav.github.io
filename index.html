@@ -12,115 +12,30 @@
 <body>
 <main>
 
-  <header>
-    <h1>Arnav Arora</h1>
-    <p class="tagline">Computer science and mathematics at the University of Michigan.
-    Most recently a software engineering intern at DoorDash, working on checkout backend systems.</p>
-    <nav class="links">
-      <a href="mailto:aroraar@umich.edu">email</a>
-      <a href="https://github.com/aroraarnav">github</a>
-      <a href="https://linkedin.com/in/arrnavarora">linkedin</a>
-      <a href="resume.pdf">resume</a>
-    </nav>
-  </header>
+  <h1>Arnav&nbsp;Arora</h1>
 
-  <section>
-    <h2>Experience</h2>
+  <p class="tagline">Software engineer, mostly backend. Currently studying computer
+  science and mathematics at Michigan.</p>
 
-    <article>
-      <div class="row">
-        <span class="what"><strong>DoorDash</strong> <span class="role">Software Engineer Intern</span></span>
-        <span class="when">May &ndash; Aug 2026</span>
-      </div>
-      <ul>
-        <li>Built backend-driven checkout and cart evaluation logic in Kotlin; cached cart previews in Redis to bypass blocking gRPC calls, cutting p99 latency from &gt;100ms to 5ms.</li>
-        <li>Shipped it to 50% of iOS users via A/B test &mdash; 3.9% lift in variable profit, 1.4% increase in DashPass signups.</li>
-        <li>Wrote event-driven promotion and state-store logic in Go for a cross-vertical DashPass campaign across 5+ in-app placements.</li>
-        <li>Automated enrollment for a 400K-user treatment cohort with ETLExpress/Airflow pipelines.</li>
-      </ul>
-    </article>
+  <ul class="places">
+    <li>
+      <img class="logo" src="doordash.svg" alt="DoorDash" width="40" height="18">
+      <span class="what"><strong>DoorDash</strong> <span class="role">Software Engineer Intern</span></span>
+      <span class="when">2026</span>
+    </li>
+    <li>
+      <img class="logo logo-m" src="michigan.svg" alt="University of Michigan" width="25" height="18">
+      <span class="what"><strong>University of Michigan</strong> <span class="role">Computer Science &amp; Mathematics</span></span>
+      <span class="when">2023&ndash;27</span>
+    </li>
+  </ul>
 
-    <article>
-      <div class="row">
-        <span class="what"><strong>Defendermate</strong> <span class="role">Software Engineer Co-Op</span></span>
-        <span class="when">Aug &ndash; Dec 2025</span>
-      </div>
-      <ul>
-        <li>Built a multimodal security analysis agent in Python on the Claude API, using live web search to investigate threat signals and surface detection gaps.</li>
-        <li>Architected a hybrid RAG pipeline (LangChain, Pinecone, OpenAI embeddings, BM25) that improved top-3 document relevance by 30%.</li>
-        <li>Wrote an automated LLM evaluation framework benchmarking agent accuracy against 500+ ground-truth threat scenarios.</li>
-      </ul>
-    </article>
-
-    <article>
-      <div class="row">
-        <span class="what"><strong>Fortis Healthcare</strong> <span class="role">Software Engineer Intern</span></span>
-        <span class="when">May &ndash; Aug 2025</span>
-      </div>
-      <ul>
-        <li>Integrated Firebase and MongoDB into a Swift iOS app for OTP-based auth across 5,000+ patient accounts.</li>
-        <li>Built a dual-channel patient alert system over Twilio and APNs, reducing appointment no-shows by 25%.</li>
-      </ul>
-    </article>
-  </section>
-
-  <section>
-    <h2>Projects</h2>
-
-    <article>
-      <div class="row">
-        <span class="what"><strong>OS Threading Library</strong> <span class="role">C++</span></span>
-        <span class="when">Sep 2025</span>
-      </div>
-      <ul>
-        <li>User-level threading library with CPU, thread, mutex, and condition-variable abstractions; multi-CPU execution with preemptive scheduling via timer interrupts.</li>
-      </ul>
-    </article>
-
-    <article>
-      <div class="row">
-        <span class="what"><strong>SolvEx</strong> <span class="role">React, PostgreSQL, Python</span></span>
-        <span class="when">May 2025</span>
-      </div>
-      <ul>
-        <li>Full-stack poker analysis platform capturing live hand histories and tracking opponent tendencies.</li>
-        <li>Parsed JSON solve trees from a custom CLI solver for GTO baselines, then used the OpenAI API to turn them into natural-language exploitative adjustments.</li>
-        <li>Used by 100+ members of the Michigan Poker Club.</li>
-      </ul>
-    </article>
-  </section>
-
-  <section>
-    <h2>Education</h2>
-    <article>
-      <div class="row">
-        <span class="what"><strong>University of Michigan</strong> <span class="role">B.S. Computer Science &amp; Mathematics</span></span>
-        <span class="when">2023 &ndash; 2027</span>
-      </div>
-      <ul>
-        <li>Coursework in operating systems, distributed systems, web systems, computer security, databases, machine learning, and information theory.</li>
-        <li>Calculus II instructional assistant; Michigan Poker Club executive board.</li>
-      </ul>
-    </article>
-  </section>
-
-  <section>
-    <h2>Tools</h2>
-    <dl class="skills">
-      <dt>Languages</dt>
-      <dd>C++, C, Java, Go, Python, JavaScript/TypeScript, Swift, Kotlin, SQL</dd>
-      <dt>Infrastructure</dt>
-      <dd>Kubernetes, Docker, Airflow, Jenkins, Ansible, Redis, gRPC, AWS</dd>
-      <dt>Frameworks</dt>
-      <dd>React, Node.js, Vue, Flask, LangChain, TensorFlow, NumPy, Pandas</dd>
-      <dt>Observability</dt>
-      <dd>Grafana, Chronosphere</dd>
-    </dl>
-  </section>
-
-  <footer>
-    <p><a href="mailto:aroraar@umich.edu">aroraar@umich.edu</a></p>
-  </footer>
+  <nav class="links">
+    <a href="resume.pdf">resume</a>
+    <a href="https://github.com/aroraarnav">github</a>
+    <a href="https://linkedin.com/in/arrnavarora">linkedin</a>
+    <a href="mailto:aroraar@umich.edu">email</a>
+  </nav>
 
 </main>
 </body>
