@@ -17,11 +17,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper:  #15181d;
-    --ink:    #dde2ea;
+    --paper:  #0a0c0f;
+    --ink:    #e8ecf2;
     --accent: #7fa8dd;
-    --rule:   #3a424e;
-    --hair:   #2d343e;
+    --rule:   #2a3038;
+    --hair:   #1e2329;
   }
 }
 
@@ -93,6 +93,32 @@ a {
 
 a:hover {
   border-bottom-color: var(--accent);
+}
+
+a.umich {
+  color: #c9a227;          /* Michigan maize, toned for body text */
+  border-bottom-color: color-mix(in srgb, #c9a227 35%, transparent);
+}
+a.umich:hover { border-bottom-color: #c9a227; }
+
+a.doordash {
+  color: #ff3008;          /* DoorDash red */
+  border-bottom-color: color-mix(in srgb, #ff3008 40%, transparent);
+}
+a.doordash:hover { border-bottom-color: #ff3008; }
+
+@media (prefers-color-scheme: dark) {
+  a.umich {
+    color: #ffcb05;        /* full maize on dark paper */
+    border-bottom-color: color-mix(in srgb, #ffcb05 40%, transparent);
+  }
+  a.umich:hover { border-bottom-color: #ffcb05; }
+
+  a.doordash {
+    color: #ff3b14;
+    border-bottom-color: color-mix(in srgb, #ff3b14 55%, transparent);
+  }
+  a.doordash:hover { border-bottom-color: #ff3b14; }
 }
 
 @media (max-width: 34rem) {
