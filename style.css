@@ -72,6 +72,15 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100vh;
+  /* svh is the viewport with the mobile browser's toolbars showing — their
+     smallest state. 100vh on iOS means the toolbar-hidden height, which would
+     push the footer below the fold until you scrolled. */
+  min-height: 100svh;
+  /* Column flex so main can absorb the slack and carry the footer to the
+     bottom. Only bites where the footer is in the flow: on desktop it's
+     position:fixed, and absolutely positioned children aren't flex items. */
+  display: flex;
+  flex-direction: column;
   background: var(--paper);
   color: var(--ink);
   font-family: "Figtree", "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -94,6 +103,8 @@ body::before {
 
 main {
   max-width: 34rem;
+  /* grows to take up the leftover height, pushing the footer down */
+  flex: 1 0 auto;
   margin: 0 auto;
   padding: 20vh var(--gutter) 8rem;
 }
@@ -239,21 +250,27 @@ p:last-child { margin-bottom: 0; }
   opacity: 0.5;
   border-bottom: 0;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
 
-/* The mark is wider than tall (293:211), so height follows from the width. */
+/* Both dimensions are stated outright (293:211, so 1.8rem → 1.296rem). Safari
+   won't derive an SVG's intrinsic ratio from viewBox alone, so `height: auto`
+   collapsed to the SVG default of 100% there and the mark filled the bar. */
 .ring svg {
   display: block;
   width: 1.8rem;
-  height: auto;
+  height: 1.296rem;
 }
 
 /* No hover on touch, so the mark would otherwise sit dim with no way to
-   brighten it. */
+   brighten it. Hovering takes it to maize, matching the UMich link. */
 @media (hover: hover) {
   .ring { opacity: 0.4; }
-  .ring:hover { opacity: 1; }
+
+  .ring:hover {
+    opacity: 1;
+    color: var(--maize);
+  }
 }
 
 .views-n {
@@ -298,11 +315,15 @@ a.doordash:hover {
 @media (max-width: 34rem), (max-height: 30rem) {
   main { padding-bottom: 3.5rem; }
 
+  /* In the flow and carried to the bottom by main's growth, so it only needs
+     enough padding to clear the frame rather than the 5rem of standoff it
+     used when it sat directly under the copy. */
   .chrome {
     position: static;
+    width: 100%;
     max-width: 34rem;
     margin: 0 auto;
-    padding: 0 var(--gutter) 5rem;
+    padding: 0 var(--gutter) 1.75rem;
   }
 
   .views { font-size: 0.8125rem; }
