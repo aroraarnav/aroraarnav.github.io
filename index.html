@@ -44,13 +44,28 @@
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   // `size` compensates for faces whose x-height runs small at a shared size —
-  // the script one reads tiny next to the others without it.
+  // the old-style italic reads tiny next to the others, VT323 reads large.
+  // The "Web" suffixes are deliberate: they name the self-hosted subsets in
+  // style.css rather than whatever a visitor happens to have installed, so
+  // everyone sees the same thing.
   var faces = [
-    { family: '"Figtree", sans-serif',                    weight: 500, spacing: "-0.03em", size: "1em"    },
-    { family: '"JetBrains Mono", ui-monospace, monospace', weight: 600, spacing: "-0.05em", size: "0.94em" },
-    { family: '"Savoye LET", "Snell Roundhand", cursive',  weight: 700, spacing: "0",       size: "1.34em" },
-    { family: 'Baskerville, Palatino, serif',              weight: 400, spacing: "-0.01em", size: "1.06em" }
+    { family: '"Figtree", sans-serif',                        weight: 500, spacing: "-0.03em", size: "1em"    },
+    { family: '"JetBrains Mono Web", ui-monospace, monospace', weight: 600, spacing: "-0.05em", size: "0.94em" },
+    { family: '"VT323 Web", ui-monospace, monospace',          weight: 400, spacing: "0.02em",  size: "1.30em" },
+    { family: '"IM Fell Web", Georgia, serif',                 weight: 400, spacing: "0.01em",  size: "1.00em",
+      style: "italic" }
   ];
+
+  // A webfont isn't fetched until it's applied to rendered text, which would
+  // mean a visible fallback flash the first time each face comes up. Warming
+  // them at load costs ~5KB total and removes the flash.
+  if (document.fonts && document.fonts.load) {
+    faces.forEach(function (f) {
+      var spec = (f.style || "normal") + " " + f.weight + " 1em " +
+                 f.family.split(",")[0].trim();
+      try { document.fonts.load(spec); } catch (e) {}
+    });
+  }
 
   var TYPE = 65, ERASE = 35, HOLD = 1900, BLANK = 320;
   var face, i, last, timer;
@@ -58,6 +73,7 @@
   function apply(f) {
     name.style.fontFamily = f.family;
     name.style.fontWeight = f.weight;
+    name.style.fontStyle = f.style || "normal";
     name.style.letterSpacing = f.spacing;
     // Size goes on .typed, never on .name: .name reserves its height in `em`,
     // so scaling it there would resize the reserved box and shove the

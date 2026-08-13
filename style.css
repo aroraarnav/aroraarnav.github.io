@@ -7,6 +7,37 @@
   font-display: swap;
 }
 
+/* The three display faces the name cycles through. All open-licensed (OFL,
+   copies in fonts/licenses) and self-hosted, because none of them exist on
+   Windows, iOS, or Android — left to the system these fell back to generic
+   sans and the cycle looked broken everywhere but a Mac.
+   Each is subset to the seven glyphs in "Arnav Arora", so all three together
+   come to about 4.5KB. Re-subset if the heading text ever changes. */
+@font-face {
+  font-family: "JetBrains Mono Web";
+  src: url("fonts/jetbrainsmono.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "VT323 Web";
+  src: url("fonts/vt323.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Genuinely an italic, so it's declared as one and the script asks for it. */
+@font-face {
+  font-family: "IM Fell Web";
+  src: url("fonts/imfell.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   /* one source of truth for the frame inset — the footer aligns to it */
   --frame:  0.85rem;
@@ -113,12 +144,16 @@ h1 {
 }
 
 /* Once it has settled, hovering wakes the caret back up and clicking replays
-   the whole cycle. */
+   the whole cycle. Gated on real hover: touch browsers latch :hover onto the
+   last-tapped element, which would leave the caret blinking forever after a
+   tap-to-replay. Tapping still replays — that runs off the click event. */
 .name.done { cursor: pointer; }
 
-.name.done:hover .cursor {
-  display: inline-block;
-  animation: caret 1.06s steps(1, end) infinite;
+@media (hover: hover) {
+  .name.done:hover .cursor {
+    display: inline-block;
+    animation: caret 1.06s steps(1, end) infinite;
+  }
 }
 
 @keyframes caret {
