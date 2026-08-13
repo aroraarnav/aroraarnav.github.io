@@ -102,10 +102,10 @@ a.umich {
 a.umich:hover { border-bottom-color: #c9a227; }
 
 a.doordash {
-  color: #ff3008;          /* DoorDash red */
-  border-bottom-color: color-mix(in srgb, #ff3008 40%, transparent);
+  color: #c75a45;          /* DoorDash red, muted for body text */
+  border-bottom-color: color-mix(in srgb, #c75a45 35%, transparent);
 }
-a.doordash:hover { border-bottom-color: #ff3008; }
+a.doordash:hover { border-bottom-color: #c75a45; }
 
 @media (prefers-color-scheme: dark) {
   a.umich {
@@ -115,10 +115,10 @@ a.doordash:hover { border-bottom-color: #ff3008; }
   a.umich:hover { border-bottom-color: #ffcb05; }
 
   a.doordash {
-    color: #ff3b14;
-    border-bottom-color: color-mix(in srgb, #ff3b14 55%, transparent);
+    color: #e07a68;
+    border-bottom-color: color-mix(in srgb, #e07a68 40%, transparent);
   }
-  a.doordash:hover { border-bottom-color: #ff3b14; }
+  a.doordash:hover { border-bottom-color: #e07a68; }
 }
 
 @media (max-width: 34rem) {
