@@ -101,12 +101,19 @@ body::before {
   z-index: 1;
 }
 
+/* Centred in whatever height is going, rather than offset a fixed 20vh from
+   the top. The old padding mixed units — 20vh top against 8rem bottom — so how
+   balanced it looked depended entirely on viewport height: fine on a tall
+   desktop window, visibly low in a short wide webview. */
 main {
   max-width: 34rem;
   /* grows to take up the leftover height, pushing the footer down */
   flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin: 0 auto;
-  padding: 20vh var(--gutter) 8rem;
+  padding: 4rem var(--gutter);
 }
 
 h1 {
@@ -305,7 +312,9 @@ a.doordash:hover {
 @media (max-width: 34rem) {
   :root { --frame: 0.55rem; --gutter: 2rem; }
   body { font-size: 1.0625rem; }
-  main { padding-top: 12vh; }
+  /* Symmetric, since main centres its own content now — a viewport-relative
+     top offset here would put the imbalance straight back. */
+  main { padding: 3rem var(--gutter); }
 }
 
 /* Pinning only holds up on a roomy viewport. On phones a fixed bottom element
@@ -313,8 +322,6 @@ a.doordash:hover {
    lands on the copy — so in both cases the footer returns to the flow, lined
    up with the text column exactly as it was before it was pinned. */
 @media (max-width: 34rem), (max-height: 30rem) {
-  main { padding-bottom: 3.5rem; }
-
   /* In the flow and carried to the bottom by main's growth, so it only needs
      enough padding to clear the frame rather than the 5rem of standoff it
      used when it sat directly under the copy. */
