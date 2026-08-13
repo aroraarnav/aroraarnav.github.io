@@ -8,6 +8,8 @@
 }
 
 :root {
+  /* one source of truth for the frame inset — the footer aligns to it */
+  --frame:  0.85rem;
   --paper:  #ece3d2;
   --ink:    #221c14;
   --accent: #4a7eb8;
@@ -50,7 +52,7 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: 0.85rem;
+  inset: var(--frame);
   border: 2px solid var(--rule);
   pointer-events: none;
   z-index: 1;
@@ -147,9 +149,15 @@ p {
 
 p:last-child { margin-bottom: 0; }
 
+/* Tucked into the bottom-left of the frame as marginalia — site chrome rather
+   than prose, so it sits outside <main> and off the text column. */
 .views {
-  margin-top: 3.5rem;
-  font-size: 0.8125rem;
+  position: fixed;
+  left: calc(var(--frame) + 1.4rem);
+  bottom: calc(var(--frame) + 0.95rem);
+  z-index: 2;
+  margin: 0;
+  font-size: 0.75rem;
   letter-spacing: 0.03em;
   opacity: 0.55;
 }
@@ -184,7 +192,18 @@ a.doordash:hover {
 }
 
 @media (max-width: 34rem) {
+  :root { --frame: 0.55rem; }
   body { font-size: 1.0625rem; }
-  body::before { inset: 0.55rem; }
   main { padding: 12vh 2rem 6rem; }
+  .views { left: calc(var(--frame) + 1rem); }
+}
+
+/* On a short viewport (landscape phone) a pinned footer can land on top of the
+   copy, so it drops back into the flow. */
+@media (max-height: 30rem) {
+  .views {
+    position: static;
+    margin: 3rem 0 0;
+    padding: 0 2.75rem 2rem;
+  }
 }
