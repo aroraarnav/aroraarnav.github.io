@@ -13,6 +13,8 @@
   --accent: #4a7eb8;
   --rule:   #b7a284;
   --hair:   #cbb99b;
+  --maize:  #c08b00;
+  --dash:   #d01400;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,6 +24,8 @@
     --accent: #7fa8dd;
     --rule:   #2a3038;
     --hair:   #1e2329;
+    --maize:  #ffcb05;
+    --dash:   #ff5a3c;
   }
 }
 
@@ -66,6 +70,66 @@ h1 {
   margin: 0 0 1.25rem;
 }
 
+/* The name types itself out, backspaces, and retypes in the next face. The
+   container is a block with a fixed line box so the paragraphs below never
+   move, whatever ascent/descent the current face happens to have — and
+   whitespace is preserved so the trailing space survives mid-word. */
+.name {
+  display: block;
+  /* shrink-wrapped so the hover/click target is the name itself, not the
+     full width of the heading line */
+  width: fit-content;
+  height: 1.05em;
+  white-space: pre;
+}
+
+/* Block cursor, only shown once the script has taken over — without JS the
+   name just sits there statically with no stray caret. */
+.cursor {
+  display: none;
+  width: 0.07em;
+  height: 0.78em;
+  margin-left: 0.16em;
+  background: var(--accent);
+  vertical-align: baseline;
+}
+
+.name.typing .cursor {
+  display: inline-block;
+  animation: caret 1.06s steps(1, end) infinite;
+}
+
+/* Two deliberate blinks to close on. This needs its own keyframe name rather
+   than a lower iteration-count on `caret` — same-named animations keep their
+   original start time, so the count would be measured against a clock that
+   started at page load and could elapse instantly. */
+.name.typing.ending .cursor {
+  animation: caret-end 1.06s steps(1, end) 2 forwards;
+}
+
+/* Once it has settled, hovering wakes the caret back up and clicking replays
+   the whole cycle. */
+.name.done { cursor: pointer; }
+
+.name.done:hover .cursor {
+  display: inline-block;
+  animation: caret 1.06s steps(1, end) infinite;
+}
+
+@keyframes caret {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@keyframes caret-end {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor { display: none; }
+}
+
 /* short rule under the name, in the accent */
 h1::after {
   content: "";
@@ -83,6 +147,20 @@ p {
 
 p:last-child { margin-bottom: 0; }
 
+.views {
+  margin-top: 3.5rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
+  opacity: 0.55;
+}
+
+.views-n {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.views[hidden] { display: none; }
+
 a {
   color: var(--accent);
   text-decoration: none;
@@ -93,6 +171,16 @@ a {
 
 a:hover {
   border-bottom-color: var(--accent);
+}
+
+a.umich:hover {
+  color: var(--maize);
+  border-bottom-color: var(--maize);
+}
+
+a.doordash:hover {
+  color: var(--dash);
+  border-bottom-color: var(--dash);
 }
 
 @media (max-width: 34rem) {

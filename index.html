@@ -13,13 +13,13 @@
 <body>
 <main>
 
-  <h1>Arnav Arora</h1>
+  <h1><span class="name" aria-label="Arnav Arora"><span class="typed">Arnav Arora</span><span class="cursor" aria-hidden="true"></span></span></h1>
 
   <p>
     I&rsquo;m studying computer science and mathematics at the
-    <a href="https://umich.edu">University of Michigan</a>, with interests in
+    <a class="umich" href="https://umich.edu">University of Michigan</a>, with interests in
     systems and software engineering. Most recently I worked on DashPass
-    benefits at <a href="https://careersatdoordash.com/engineering-blog/">DoorDash</a>.
+    benefits at <a class="doordash" href="https://careersatdoordash.com/engineering-blog/">DoorDash</a>.
   </p>
 
   <p>
@@ -29,6 +29,122 @@
     <a href="mailto:aroraar@umich.edu">aroraar@umich.edu</a>.
   </p>
 
+  <p class="views" hidden>You&rsquo;re the <strong class="views-n"></strong> visitor!</p>
+
 </main>
+
+<script>
+(function () {
+  var name = document.querySelector(".name");
+  var typed = name.querySelector(".typed");
+  var cursor = name.querySelector(".cursor");
+  var text = typed.textContent;
+
+  // Nothing moves for anyone who asked for less motion; the static name stays.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // `size` compensates for faces whose x-height runs small at a shared size —
+  // the script one reads tiny next to the others without it.
+  var faces = [
+    { family: '"Figtree", sans-serif',                    weight: 500, spacing: "-0.03em", size: "1em"    },
+    { family: '"JetBrains Mono", ui-monospace, monospace', weight: 600, spacing: "-0.05em", size: "0.94em" },
+    { family: '"Savoye LET", "Snell Roundhand", cursive',  weight: 700, spacing: "0",       size: "1.34em" },
+    { family: 'Baskerville, Palatino, serif',              weight: 400, spacing: "-0.01em", size: "1.06em" }
+  ];
+
+  var TYPE = 65, ERASE = 35, HOLD = 1900, BLANK = 320;
+  var face, i, last, timer;
+
+  function apply(f) {
+    name.style.fontFamily = f.family;
+    name.style.fontWeight = f.weight;
+    name.style.letterSpacing = f.spacing;
+    // Size goes on .typed, never on .name: .name reserves its height in `em`,
+    // so scaling it there would resize the reserved box and shove the
+    // paragraphs down. On .typed the glyphs just overflow harmlessly.
+    typed.style.fontSize = f.size;
+  }
+
+  function type() {
+    typed.textContent = text.slice(0, ++i);
+    if (i < text.length) return (timer = setTimeout(type, TYPE));
+    if (last) return finish();
+    timer = setTimeout(erase, HOLD);
+  }
+
+  function erase() {
+    typed.textContent = text.slice(0, --i);
+    if (i > 0) return (timer = setTimeout(erase, ERASE));
+    // Swapped only at zero width, so the metric change is never visible.
+    face = (face + 1) % faces.length;
+    if (face === 0) last = true;
+    apply(faces[face]);
+    timer = setTimeout(type, BLANK);
+  }
+
+  // Back on the opening face with the name whole: blink twice, then rest.
+  function finish() {
+    name.classList.add("ending");
+    cursor.addEventListener("animationend", function () {
+      name.classList.remove("typing", "ending");
+      name.classList.add("done");
+    }, { once: true });
+  }
+
+  function start() {
+    clearTimeout(timer);
+    face = 0;
+    i = text.length;
+    last = false;
+    typed.textContent = text;
+    apply(faces[0]);
+    name.classList.remove("done", "ending");
+    name.classList.add("typing");
+    timer = setTimeout(erase, HOLD);
+  }
+
+  // Only a settled name replays. Mid-cycle clicks are ignored, so a running
+  // animation can never be cut off and restarted underneath itself.
+  name.addEventListener("click", function () {
+    if (name.classList.contains("done")) start();
+  });
+
+  start();
+})();
+
+// Visit counter. GitHub Pages is static, so the count lives on a hosted
+// counter service; the element stays hidden unless a real number comes back,
+// which is quieter than showing a broken placeholder.
+(function () {
+  var el = document.querySelector(".views");
+  if (!el) return;
+
+  var API = "https://abacus.jasoncameron.dev";
+  var KEY = "/aroraarnav-github-io/views";
+  // Local reloads read the count without incrementing it, so development
+  // doesn't inflate the number.
+  var local = location.hostname === "localhost" ||
+              location.hostname === "127.0.0.1" ||
+              location.protocol === "file:";
+
+  // 1st, 2nd, 3rd, 4th — but 11th, 12th, 13th, which is why the teens are
+  // checked before the last digit.
+  function ordinal(n) {
+    var teen = n % 100;
+    if (teen >= 11 && teen <= 13) return "th";
+    return { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th";
+  }
+
+  fetch(API + (local ? "/get" : "/hit") + KEY)
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (d) {
+      if (typeof d.value !== "number") return;
+      el.querySelector(".views-n").textContent =
+        d.value.toLocaleString() + ordinal(d.value);
+      el.hidden = false;
+    })
+    .catch(function () { /* leave it hidden */ });
+})();
+</script>
 </body>
 </html>
