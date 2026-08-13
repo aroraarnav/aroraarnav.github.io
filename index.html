@@ -17,7 +17,7 @@
 
   <p>
     I&rsquo;m studying computer science and mathematics at the
-    <a class="umich" href="https://umich.edu">University of Michigan</a>, with interests in
+    <a class="umich" href="https://cse.engin.umich.edu/">University of Michigan</a>, with interests in
     systems and software engineering. Most recently I worked on DashPass
     benefits at <a class="doordash" href="https://careersatdoordash.com/engineering-blog/">DoorDash</a>.
   </p>
@@ -31,7 +31,18 @@
 
 </main>
 
-<footer class="views" hidden>You&rsquo;re the <strong class="views-n"></strong> visitor!</footer>
+<footer class="chrome">
+  <p class="views" hidden>You&rsquo;re the <strong class="views-n"></strong> visitor!</p>
+  <a class="ring" href="https://michigan-webring.vercel.app/" aria-label="Michigan webring">
+    <!-- Block M, taken from the webring's own logo asset
+         (michigan-webring.vercel.app/images/michigan-logo-black.svg). Only the
+         outer path is kept: the file carries a second, inset copy for a
+         two-tone treatment, which is redundant in a single colour. -->
+    <svg viewBox="0 0 293 211" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M203.825 0.235775L146.263 79.8201L88.7969 0.235775H0.146957V62.7701H22.1063V148.095H0.146957V210.626H113.188V148.095H89.7657V99.1263L145.959 176.395L202.856 99.0607V148.095H179.434V210.626H292.475V148.095H270.516V62.7701H292.475V0.235775H203.825Z"/>
+    </svg>
+  </a>
+</footer>
 
 <script>
 (function () {
@@ -48,12 +59,19 @@
   // The "Web" suffixes are deliberate: they name the self-hosted subsets in
   // style.css rather than whatever a visitor happens to have installed, so
   // everyone sees the same thing.
+  // `shift` puts every face on Figtree's baseline. Derived from each font's
+  // hhea ascent/descent rather than eyeballed: where the baseline falls in a
+  // fixed line box is (lineHeight - (asc-desc)*size)/2 + asc*size. Note the
+  // values are divided by that face's own `size`, because `top` resolves
+  // against the element's font-size, not the heading's.
   var faces = [
     { family: '"Figtree", sans-serif',                        weight: 500, spacing: "-0.03em", size: "1em"    },
-    { family: '"JetBrains Mono Web", ui-monospace, monospace', weight: 600, spacing: "-0.05em", size: "0.94em" },
-    { family: '"VT323 Web", ui-monospace, monospace',          weight: 400, spacing: "0.02em",  size: "1.30em" },
+    { family: '"JetBrains Mono Web", ui-monospace, monospace', weight: 600, spacing: "-0.05em", size: "0.94em",
+      shift: "0.012em" },
+    { family: '"VT323 Web", ui-monospace, monospace',          weight: 400, spacing: "0.02em",  size: "1.30em",
+      shift: "-0.031em" },
     { family: '"IM Fell Web", Georgia, serif',                 weight: 400, spacing: "0.01em",  size: "1.00em",
-      style: "italic" }
+      style: "italic", shift: "0.079em" }
   ];
 
   // A webfont isn't fetched until it's applied to rendered text, which would
@@ -79,6 +97,8 @@
     // so scaling it there would resize the reserved box and shove the
     // paragraphs down. On .typed the glyphs just overflow harmlessly.
     typed.style.fontSize = f.size;
+    // Positive nudges the face down onto the shared baseline.
+    typed.style.top = f.shift || "0";
   }
 
   function type() {

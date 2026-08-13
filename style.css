@@ -119,6 +119,15 @@ h1 {
   white-space: pre;
 }
 
+/* Relative so each face can be nudged onto a common baseline. Where the glyph
+   baseline lands inside a fixed line box depends on the font's own ascent and
+   descent, so faces with unusual vertical metrics — old-style italics
+   especially — sit visibly high or low next to the others. `top` shifts the
+   render without touching layout. */
+.typed {
+  position: relative;
+}
+
 /* Block cursor, only shown once the script has taken over — without JS the
    name just sits there statically with no stray caret. */
 .cursor {
@@ -156,14 +165,21 @@ h1 {
   }
 }
 
+/* Blinks on `visibility`, not `opacity`. Opacity is compositor-animatable, so
+   it promoted the caret to its own layer and the browser expanded that layer
+   to the full-width h1 band — which then rasterized on a separate surface with
+   subtly different color management, tinting the whole heading strip. Most
+   obvious with the word erased, when the caret was all that band contained.
+   `visibility` is discrete, animates on the main thread, and creates no layer;
+   it also holds the caret's box, so nothing reflows as it flashes. */
 @keyframes caret {
-  0%, 50%   { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
+  0%, 50%   { visibility: visible; }
+  50.01%, 100% { visibility: hidden; }
 }
 
 @keyframes caret-end {
-  0%, 50%   { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
+  0%, 50%   { visibility: visible; }
+  50.01%, 100% { visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -187,17 +203,57 @@ p {
 
 p:last-child { margin-bottom: 0; }
 
-/* Tucked into the bottom-left of the frame as marginalia — site chrome rather
-   than prose, so it sits outside <main> and off the text column. */
-.views {
+/* Site chrome rather than prose, so it sits outside <main> and off the text
+   column: one bar spanning the frame, counter at the left end, webring mark at
+   the right. */
+.chrome {
   position: fixed;
   left: calc(var(--frame) + 1.4rem);
+  right: calc(var(--frame) + 1.4rem);
   bottom: calc(var(--frame) + 0.95rem);
   z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.views {
   margin: 0;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   opacity: 0.55;
+}
+
+/* margin-left:auto rather than space-between, so the mark still sits right
+   when the counter is hidden and it's the only child. The padding buys a
+   44px touch target and the matching negative margins cancel it out of the
+   layout, so the mark still lines up with the frame. */
+.ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 1.8rem icon + 0.65rem each side ≈ a 49px target, cancelled by the
+     matching negative margins */
+  margin: -0.65rem -0.65rem -0.65rem auto;
+  padding: 0.65rem;
+  color: var(--accent);
+  opacity: 0.5;
+  border-bottom: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease;
+}
+
+/* The mark is wider than tall (293:211), so height follows from the width. */
+.ring svg {
+  display: block;
+  width: 1.8rem;
+  height: auto;
+}
+
+/* No hover on touch, so the mark would otherwise sit dim with no way to
+   brighten it. */
+@media (hover: hover) {
+  .ring { opacity: 0.4; }
+  .ring:hover { opacity: 1; }
 }
 
 .views-n {
@@ -242,11 +298,12 @@ a.doordash:hover {
 @media (max-width: 34rem), (max-height: 30rem) {
   main { padding-bottom: 3.5rem; }
 
-  .views {
+  .chrome {
     position: static;
     max-width: 34rem;
     margin: 0 auto;
     padding: 0 var(--gutter) 5rem;
-    font-size: 0.8125rem;
   }
+
+  .views { font-size: 0.8125rem; }
 }
