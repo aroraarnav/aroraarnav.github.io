@@ -10,7 +10,7 @@
 :root {
   --paper:  #ece3d2;
   --ink:    #221c14;
-  --accent: #a8451f;
+  --accent: #4a7eb8;
   --rule:   #b7a284;
   --hair:   #cbb99b;
 }
@@ -93,32 +93,6 @@ a {
 
 a:hover {
   border-bottom-color: var(--accent);
-}
-
-a.umich {
-  color: #c9a227;          /* Michigan maize, toned for body text */
-  border-bottom-color: color-mix(in srgb, #c9a227 35%, transparent);
-}
-a.umich:hover { border-bottom-color: #c9a227; }
-
-a.doordash {
-  color: #c75a45;          /* DoorDash red, muted for body text */
-  border-bottom-color: color-mix(in srgb, #c75a45 35%, transparent);
-}
-a.doordash:hover { border-bottom-color: #c75a45; }
-
-@media (prefers-color-scheme: dark) {
-  a.umich {
-    color: #ffcb05;        /* full maize on dark paper */
-    border-bottom-color: color-mix(in srgb, #ffcb05 40%, transparent);
-  }
-  a.umich:hover { border-bottom-color: #ffcb05; }
-
-  a.doordash {
-    color: #e07a68;
-    border-bottom-color: color-mix(in srgb, #e07a68 40%, transparent);
-  }
-  a.doordash:hover { border-bottom-color: #e07a68; }
 }
 
 @media (max-width: 34rem) {
