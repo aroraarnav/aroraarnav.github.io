@@ -32,8 +32,11 @@
 </main>
 
 <footer class="chrome">
-  <p class="views" hidden>You&rsquo;re the <strong class="views-n"></strong> visitor!</p>
-  <a class="ring" href="https://michigan-webring.vercel.app/" aria-label="Michigan webring">
+  <!-- Starts hidden only so a visitor without JS never sees the sentence with
+       a hole in it; the script unhides it synchronously, before first paint. -->
+  <p class="views" hidden>You&rsquo;re the <strong class="views-n"><span class="views-d"></span></strong> visitor!</p>
+  <a class="ring" href="https://michigan-webring.vercel.app/"
+     target="_blank" rel="noopener noreferrer" aria-label="Michigan webring (opens in a new tab)">
     <!-- Block M, taken from the webring's own logo asset
          (michigan-webring.vercel.app/images/michigan-logo-black.svg). Only the
          outer path is kept: the file carries a second, inset copy for a
@@ -149,11 +152,18 @@
 })();
 
 // Visit counter. GitHub Pages is static, so the count lives on a hosted
-// counter service; the element stays hidden unless a real number comes back,
-// which is quieter than showing a broken placeholder.
+// counter service. The sentence paints with the rest of the page and holds an
+// empty slot open; only the digits wait on the network, and they slide up into
+// the slot when they land. If the request fails the whole line retires rather
+// than sitting there with a hole in it.
 (function () {
   var el = document.querySelector(".views");
   if (!el) return;
+
+  var digits = el.querySelector(".views-d");
+  // Synchronous, so this happens in the same frame as first paint — the
+  // `hidden` attribute in the markup is only there for the no-JS case.
+  el.hidden = false;
 
   var API = "https://abacus.jasoncameron.dev";
   var KEY = "/aroraarnav-github-io/views";
@@ -174,12 +184,16 @@
   fetch(API + (local ? "/get" : "/hit") + KEY)
     .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
     .then(function (d) {
-      if (typeof d.value !== "number") return;
-      el.querySelector(".views-n").textContent =
-        d.value.toLocaleString() + ordinal(d.value);
-      el.hidden = false;
+      if (typeof d.value !== "number") return Promise.reject("no value");
+      digits.textContent = d.value.toLocaleString() + ordinal(d.value);
+      // The class drives the CSS animation; the reduced-motion query inside
+      // style.css turns it into a plain appearance.
+      el.classList.add("counted");
     })
-    .catch(function () { /* leave it hidden */ });
+    .catch(function () {
+      // Fold the slot shut and fade the sentence away.
+      el.classList.add("uncounted");
+    });
 })();
 </script>
 </body>

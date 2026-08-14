@@ -51,6 +51,14 @@
   --hair:   #cbb99b;
   --maize:  #c08b00;
   --dash:   #d01400;
+  /* The footer sentence, as a colour rather than an opacity, so the number
+     inside it can be a different colour at full strength. This is the old
+     0.55 opacity resolved against the paper — the sentence looks unchanged. */
+  --muted:  #7d7669;
+  /* The accent darkened along its own hue and saturation until small bold text
+     clears 4.5:1 on the paper (#4a7eb8 only manages 3.32:1). Same blue, just
+     enough weight to be read at 0.75rem. */
+  --accent-ink: #3a6595;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,6 +70,9 @@
     --hair:   #1e2329;
     --maize:  #ffcb05;
     --dash:   #ff5a3c;
+    --muted:  #84878c;
+    /* Already 7.97:1 on the dark paper, so the link accent serves as-is. */
+    --accent-ink: #7fa8dd;
   }
 }
 
@@ -238,7 +249,7 @@ p:last-child { margin-bottom: 0; }
   margin: 0;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
-  opacity: 0.55;
+  color: var(--muted);
 }
 
 /* margin-left:auto rather than space-between, so the mark still sits right
@@ -280,9 +291,65 @@ p:last-child { margin-bottom: 0; }
   }
 }
 
+/* The slot the digits arrive into. It is opened before the request resolves,
+   so the sentence around it never reflows, and it clips whatever is inside so
+   the number can start below the line and slide up into view.
+
+   `vertical-align: bottom` is what keeps the figures on the sentence's
+   baseline: an overflow-hidden inline-block has no usable baseline of its own,
+   so it has to be aligned by an edge instead. Since the box is a single line
+   box at the inherited font-size and line-height, its bottom edge and the
+   surrounding strut's bottom edge coincide — and so do the two baselines. */
 .views-n {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* ~"999th" in tabular figures. Reserved up front so the trailing "visitor!"
+     doesn't shuffle sideways when the count lands. */
+  min-width: 3.1ch;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  /* Full strength against the muted sentence, so the number is what the eye
+     goes to — and so the thing that slides in is the thing that stands out. */
+  color: var(--accent-ink);
+}
+
+/* Parked one full line below the slot, i.e. clipped out of sight. */
+.views-d {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+/* Short, and almost entirely front-loaded: the curve spends its first third
+   covering most of the distance and the rest arresting, so the number reads as
+   having been thrown into place and caught rather than eased in. */
+.views.counted .views-d {
+  animation: swoop 320ms cubic-bezier(0.1, 0.86, 0.12, 1) both;
+}
+
+@keyframes swoop {
+  from { transform: translateY(110%); opacity: 0; }
+  /* Opaque well before it stops, so the eye reads travel, not a fade. */
+  25%  { opacity: 1; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Nothing came back. Close the slot and retire the sentence instead of leaving
+   a gap in it. */
+.views {
+  transition: opacity 0.35s ease;
+}
+
+.views.uncounted {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.views.uncounted .views-n { min-width: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .views-d { transform: none; }
+  .views.counted .views-d { animation: none; }
 }
 
 .views[hidden] { display: none; }
