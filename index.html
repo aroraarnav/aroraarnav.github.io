@@ -160,6 +160,7 @@
   var el = document.querySelector(".views");
   if (!el) return;
 
+  var slot = el.querySelector(".views-n");
   var digits = el.querySelector(".views-d");
   // Synchronous, so this happens in the same frame as first paint — the
   // `hidden` attribute in the markup is only there for the no-JS case.
@@ -186,9 +187,20 @@
     .then(function (d) {
       if (typeof d.value !== "number") return Promise.reject("no value");
       digits.textContent = d.value.toLocaleString() + ordinal(d.value);
-      // The class drives the CSS animation; the reduced-motion query inside
-      // style.css turns it into a plain appearance.
-      el.classList.add("counted");
+      // Wait for the face the figures will actually be set in. Measuring
+      // against a fallback would size the slot to the wrong glyph widths, and
+      // the transition would then animate to a width that is visibly off.
+      var ready = (document.fonts && document.fonts.ready) ||
+                  Promise.resolve();
+      return ready.then(function () {
+        // The slot is opened to the count's real width rather than a reserved
+        // guess, so it fits 93rd and 12,345th equally well. The CSS transition
+        // animates the difference in step with the swoop.
+        slot.style.width = digits.getBoundingClientRect().width + "px";
+        // The class drives the CSS animation; the reduced-motion query inside
+        // style.css turns it into a plain appearance.
+        el.classList.add("counted");
+      });
     })
     .catch(function () {
       // Fold the slot shut and fade the sentence away.

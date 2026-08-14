@@ -304,9 +304,15 @@ p:last-child { margin-bottom: 0; }
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
-  /* ~"999th" in tabular figures. Reserved up front so the trailing "visitor!"
-     doesn't shuffle sideways when the count lands. */
-  min-width: 3.1ch;
+  /* The slot opens at roughly three figures and is then set to the count's
+     real width in JS, which the transition below carries. Any fixed reserve
+     would be a guess with an expiry date — 999th needs 4.66ch but 1,000th
+     needs 6.12ch — so instead of picking a number that eventually goes stale,
+     the difference becomes part of the motion: the slot widens as the figures
+     rise into it, and "visitor!" glides across instead of snapping. */
+  width: 3.1ch;
+  /* Same duration and curve as the swoop, so the two read as one movement. */
+  transition: width 320ms cubic-bezier(0.1, 0.86, 0.12, 1);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   /* Full strength against the muted sentence, so the number is what the eye
@@ -345,11 +351,12 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
-.views.uncounted .views-n { min-width: 0; }
+.views.uncounted .views-n { width: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .views-d { transform: none; }
   .views.counted .views-d { animation: none; }
+  .views-n { transition: none; }
 }
 
 .views[hidden] { display: none; }
