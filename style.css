@@ -44,20 +44,29 @@
   /* main's side padding, shared so the footer can line up with the text
      column whenever it sits in the flow */
   --gutter: 2.75rem;
-  --paper:  #ece3d2;
-  --ink:    #221c14;
-  --accent: #4a7eb8;
-  --rule:   #b7a284;
-  --hair:   #cbb99b;
+  /* A cool grey ground rather than the old parchment. Same lightness, so the
+     page is no brighter than before, but neutral instead of tan — the warm
+     paper was pulling against the cool blue of the links and of dark mode. */
+  --paper:  #e6e9ee;
+  --ink:    #1a1d22;
+  /* The darker blue is now the only blue. On the parchment the lighter #4a7eb8
+     managed just 3.32:1 and a second, darker token had to carry small text;
+     on this ground the darker one clears 4.5:1 everywhere, so links, the rule
+     under the name and the visitor count can all share it. */
+  --accent: #3a6595;
+  --rule:   #a8b0bc;
+  --hair:   #c3cad3;
+  /* Brand colours, used only on hover for their own links. Left at their
+     Michigan/DoorDash values — maize sits at 2.49:1 here, as it did on the
+     parchment, so it reads as a highlight rather than as body text. */
   --maize:  #c08b00;
   --dash:   #d01400;
   /* The footer sentence, as a colour rather than an opacity, so the number
-     inside it can be a different colour at full strength. This is the old
-     0.55 opacity resolved against the paper — the sentence looks unchanged. */
-  --muted:  #7d7669;
-  /* The accent darkened along its own hue and saturation until small bold text
-     clears 4.5:1 on the paper (#4a7eb8 only manages 3.32:1). Same blue, just
-     enough weight to be read at 0.75rem. */
+     inside it can be a different colour at full strength. Re-mixed against the
+     new ground and nudged darker to hold up at 0.75rem. */
+  --muted:  #6e747d;
+  /* Kept as its own token so the dark block can still diverge, but on this
+     ground it resolves to the same blue as --accent. */
   --accent-ink: #3a6595;
 }
 
