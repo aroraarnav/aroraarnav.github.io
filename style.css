@@ -70,8 +70,13 @@
   --accent-ink: #3a6595;
 }
 
+/* Same block twice: once gated on the system preference (skipped when an
+   explicit light choice overrides it), once gated on the explicit dark
+   choice itself. Duplicated rather than shared so each selector stays a
+   single rule the cascade can reorder freely — a combined selector would tie
+   their specificity together for no benefit. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper:  #0a0c0f;
     --ink:    #e8ecf2;
     --accent: #7fa8dd;
@@ -83,6 +88,18 @@
     /* Already 7.97:1 on the dark paper, so the link accent serves as-is. */
     --accent-ink: #7fa8dd;
   }
+}
+
+:root[data-theme="dark"] {
+  --paper:  #0a0c0f;
+  --ink:    #e8ecf2;
+  --accent: #7fa8dd;
+  --rule:   #2a3038;
+  --hair:   #1e2329;
+  --maize:  #ffcb05;
+  --dash:   #ff5a3c;
+  --muted:  #84878c;
+  --accent-ink: #7fa8dd;
 }
 
 * { box-sizing: border-box; }
@@ -241,6 +258,51 @@ p {
 
 p:last-child { margin-bottom: 0; }
 
+/* Pinned to the frame's top-right corner regardless of breakpoint, unlike
+   .chrome below — the bottom bar has to un-pin on short/narrow viewports
+   because a fixed bottom element sits under the mobile browser's own
+   toolbar, but nothing about this page ever scrolls the top corner out from
+   under an equivalent top bar, so one fixed position covers every size. */
+.theme-toggle {
+  position: fixed;
+  top: var(--frame);
+  right: var(--frame);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--ink);
+  opacity: 0.5;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.theme-toggle svg { width: 1.05rem; height: 1.05rem; }
+
+/* Only one icon shows at a time: the sun when dark is active (click for
+   light), the moon otherwise — the icon signals the click's destination,
+   not the current state. Mirrors the token blocks above: a media-gated rule
+   for the system default, an attribute-gated rule for the explicit choice. */
+.theme-toggle .icon-sun { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+@media (hover: hover) {
+  .theme-toggle:hover { opacity: 1; color: var(--accent); }
+}
+
 /* Site chrome rather than prose, so it sits outside <main> and off the text
    column: one bar spanning the frame, counter at the left end, webring mark at
    the right. */
@@ -398,6 +460,15 @@ a.doordash:hover {
   /* Symmetric, since main centres its own content now — a viewport-relative
      top offset here would put the imbalance straight back. */
   main { padding: 3rem var(--gutter); }
+
+  .theme-toggle { width: 2.4rem; height: 2.4rem; }
+  .theme-toggle svg { width: 0.95rem; height: 0.95rem; }
+}
+
+/* Windows High Contrast Mode strips custom colours from decorative
+   backgrounds and borders; without this the frame simply vanishes there. */
+@media (forced-colors: active) {
+  body::before { border-color: CanvasText; }
 }
 
 /* Pinning only holds up on a roomy viewport. On phones a fixed bottom element

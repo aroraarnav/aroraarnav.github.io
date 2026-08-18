@@ -6,11 +6,59 @@
 <title>aroraarnav</title>
 <meta name="description" content="Arnav Arora — studying computer science and mathematics at the University of Michigan.">
 <meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Arnav Arora">
+<meta property="og:description" content="Studying computer science and mathematics at the University of Michigan.">
+<meta property="og:url" content="https://aroraarnav.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Arnav Arora">
+<meta name="twitter:description" content="Studying computer science and mathematics at the University of Michigan.">
 <link rel="preload" href="fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Arnav Arora",
+  "url": "https://aroraarnav.github.io/",
+  "email": "mailto:aroraar@umich.edu",
+  "sameAs": [
+    "https://github.com/aroraarnav",
+    "https://www.linkedin.com/in/arrnavarora"
+  ],
+  "affiliation": {
+    "@type": "CollegeOrUniversity",
+    "name": "University of Michigan"
+  }
+}
+</script>
+<script>
+// Applied before first paint so an explicit choice never flashes the system
+// theme first. Absence of a stored value leaves the attribute off entirely,
+// so the prefers-color-scheme media query in style.css keeps deciding.
+(function () {
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") {
+      document.documentElement.setAttribute("data-theme", t);
+    }
+  } catch (e) {}
+})();
+</script>
 </head>
 <body>
+
+<button class="theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
+  <svg class="icon-sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="5"/>
+    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
 <main>
 
   <h1><span class="name" aria-label="Arnav Arora"><span class="typed">Arnav Arora</span><span class="cursor" aria-hidden="true"></span></span></h1>
@@ -149,6 +197,35 @@
   });
 
   start();
+})();
+
+// Theme toggle. Explicit choice overrides the system preference and
+// persists; with no choice made yet, it just tracks and displays whichever
+// theme prefers-color-scheme is currently resolving to.
+(function () {
+  var root = document.documentElement;
+  var btn = document.querySelector(".theme-toggle");
+  if (!btn) return;
+
+  var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function effective() {
+    return root.getAttribute("data-theme") || (media.matches ? "dark" : "light");
+  }
+
+  function reflect() {
+    btn.setAttribute("aria-pressed", effective() === "dark" ? "true" : "false");
+  }
+
+  reflect();
+  media.addEventListener("change", reflect);
+
+  btn.addEventListener("click", function () {
+    var next = effective() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    reflect();
+  });
 })();
 
 // Visit counter. GitHub Pages is static, so the count lives on a hosted
