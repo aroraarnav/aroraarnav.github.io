@@ -102,6 +102,19 @@
   --accent-ink: #7fa8dd;
 }
 
+/* Live only for the ~500ms a click on .theme-toggle spends swapping
+   data-theme (added and timed out from there in index.html), so the crossfade
+   doesn't slow down ordinary link/icon hovers the rest of the time. !important
+   is what lets one blanket rule outrun every element's own hover-transition
+   shorthand without having to duplicate this list into each of them. */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 0.45s ease, color 0.45s ease,
+    border-color 0.45s ease, fill 0.45s ease, stroke 0.45s ease !important;
+}
+
 * { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
@@ -258,51 +271,6 @@ p {
 
 p:last-child { margin-bottom: 0; }
 
-/* Pinned to the frame's top-right corner regardless of breakpoint, unlike
-   .chrome below — the bottom bar has to un-pin on short/narrow viewports
-   because a fixed bottom element sits under the mobile browser's own
-   toolbar, but nothing about this page ever scrolls the top corner out from
-   under an equivalent top bar, so one fixed position covers every size. */
-.theme-toggle {
-  position: fixed;
-  top: var(--frame);
-  right: var(--frame);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 0;
-  background: none;
-  padding: 0;
-  color: var(--ink);
-  opacity: 0.5;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.15s ease, color 0.15s ease;
-}
-
-.theme-toggle svg { width: 1.05rem; height: 1.05rem; }
-
-/* Only one icon shows at a time: the sun when dark is active (click for
-   light), the moon otherwise — the icon signals the click's destination,
-   not the current state. Mirrors the token blocks above: a media-gated rule
-   for the system default, an attribute-gated rule for the explicit choice. */
-.theme-toggle .icon-sun { display: none; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
-  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
-}
-
-:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-
-@media (hover: hover) {
-  .theme-toggle:hover { opacity: 1; color: var(--accent); }
-}
-
 /* Site chrome rather than prose, so it sits outside <main> and off the text
    column: one bar spanning the frame, counter at the left end, webring mark at
    the right. */
@@ -321,6 +289,64 @@ p:last-child { margin-bottom: 0; }
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   color: var(--muted);
+}
+
+/* Pinned to the frame's top-right corner rather than living in .chrome
+   below — the bottom bar has to un-pin on short/narrow viewports because a
+   fixed bottom element sits under the mobile browser's own toolbar, but
+   nothing on this page ever scrolls the top corner out from under an
+   equivalent top bar, so one fixed position covers every size. Boxed at the
+   same 1.8rem footprint as .ring so the two read as one family of controls
+   despite sitting in different corners. The same extra insets .ring sits at
+   in .chrome below (1.4rem horizontal, 0.95rem vertical) are repeated here
+   rather than sitting flush against the frame border itself. */
+.theme-toggle {
+  position: fixed;
+  top: calc(var(--frame) + 0.95rem);
+  right: calc(var(--frame) + 1.4rem);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid var(--hair);
+  border-radius: 0.35rem;
+  background: none;
+  padding: 0;
+  color: var(--ink);
+  opacity: 0.4;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle svg { width: 1.05rem; height: 1.05rem; }
+
+/* Only one icon shows at a time: the sun when dark is active (click for
+   light), the moon otherwise — the icon signals the click's destination,
+   not the current state. Mirrors the token blocks above: a media-gated rule
+   for the system default, an attribute-gated rule for the explicit choice. */
+.theme-toggle .icon-sun { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* Same treatment as .ring's hover below: dim until hovered, then to full
+   strength in the accent. */
+@media (hover: hover) {
+  .theme-toggle { opacity: 0.5; }
+
+  .theme-toggle:hover {
+    opacity: 1;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 }
 
 /* margin-left:auto rather than space-between, so the mark still sits right
@@ -460,9 +486,6 @@ a.doordash:hover {
   /* Symmetric, since main centres its own content now — a viewport-relative
      top offset here would put the imbalance straight back. */
   main { padding: 3rem var(--gutter); }
-
-  .theme-toggle { width: 2.4rem; height: 2.4rem; }
-  .theme-toggle svg { width: 0.95rem; height: 0.95rem; }
 }
 
 /* Windows High Contrast Mode strips custom colours from decorative

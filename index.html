@@ -208,6 +208,8 @@
   if (!btn) return;
 
   var media = window.matchMedia("(prefers-color-scheme: dark)");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var fadeTimer;
 
   function effective() {
     return root.getAttribute("data-theme") || (media.matches ? "dark" : "light");
@@ -222,6 +224,16 @@
 
   btn.addEventListener("click", function () {
     var next = effective() === "dark" ? "light" : "dark";
+    // The crossfade only runs while this class is present — see style.css —
+    // so it's added right before the swap and timed out afterward, leaving
+    // every other hover transition on the page at its normal fast speed.
+    if (!reduceMotion.matches) {
+      clearTimeout(fadeTimer);
+      root.classList.add("theme-transitioning");
+      fadeTimer = setTimeout(function () {
+        root.classList.remove("theme-transitioning");
+      }, 500);
+    }
     root.setAttribute("data-theme", next);
     try { localStorage.setItem("theme", next); } catch (e) {}
     reflect();
