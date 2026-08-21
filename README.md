@@ -1,4 +1,4 @@
-# aroraarnav.github.io
+# aroraarnav.com
 
 Personal site. Static HTML/CSS, no build step.
 
