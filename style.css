@@ -134,7 +134,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: "Figtree", "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 1.1875rem;
+  font-size: 1.15rem;
   font-weight: 400;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -156,7 +156,7 @@ body::before {
    balanced it looked depended entirely on viewport height: fine on a tall
    desktop window, visibly low in a short wide webview. */
 main {
-  max-width: 34rem;
+  max-width: 36rem;
   /* grows to take up the leftover height, pushing the footer down */
   flex: 1 0 auto;
   display: flex;
