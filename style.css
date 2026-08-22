@@ -1,30 +1,40 @@
-/* Figtree stands in for Proxima Nova, which is a licensed commercial face. */
+/* Body face. Newsreader's optical size is pinned at 18pt in the file
+   itself — a text cut, not the display one used on the name. */
 @font-face {
-  font-family: "Figtree";
-  src: url("fonts/figtree.woff2") format("woff2");
-  font-weight: 300 900;
+  font-family: "Newsreader";
+  src: url("fonts/newsreader.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* The three display faces the name cycles through. All open-licensed (OFL,
+/* The four display faces the name cycles through. All open-licensed (OFL,
    copies in fonts/licenses) and self-hosted, because none of them exist on
    Windows, iOS, or Android — left to the system these fell back to generic
-   sans and the cycle looked broken everywhere but a Mac.
-   Each is subset to the seven glyphs in "Arnav Arora", so all three together
-   come to about 4.5KB. Re-subset if the heading text ever changes. */
+   serif and the cycle looked broken everywhere but a Mac.
+   Newsreader italic, Source Serif 4 and IM Fell are subset to the seven
+   glyphs in "Arnav Arora". Plex Mono keeps a Latin set so the footer can
+   wear it too. Re-subset the name faces if the heading text ever changes. */
 @font-face {
-  font-family: "JetBrains Mono Web";
-  src: url("fonts/jetbrainsmono.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
+  font-family: "Newsreader Italic Web";
+  src: url("fonts/newsreader-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "VT323 Web";
-  src: url("fonts/vt323.woff2") format("woff2");
+  font-family: "Source Serif Web";
+  src: url("fonts/sourceserif4-italic.woff2") format("woff2");
   font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Web";
+  src: url("fonts/ibmplexmono.woff2") format("woff2");
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
@@ -40,84 +50,24 @@
 
 :root {
   /* one source of truth for the frame inset — the footer aligns to it */
-  --frame:  0.85rem;
+  --frame:  0.7rem;
   /* main's side padding, shared so the footer can line up with the text
      column whenever it sits in the flow */
   --gutter: 2.75rem;
-  /* A cool grey ground rather than the old parchment. Same lightness, so the
-     page is no brighter than before, but neutral instead of tan — the warm
-     paper was pulling against the cool blue of the links and of dark mode. */
-  --paper:  #e6e9ee;
-  --ink:    #1a1d22;
-  /* The darker blue is now the only blue. On the parchment the lighter #4a7eb8
-     managed just 3.32:1 and a second, darker token had to carry small text;
-     on this ground the darker one clears 4.5:1 everywhere, so links, the rule
-     under the name and the visitor count can all share it. */
-  --accent: #3a6595;
-  --rule:   #a8b0bc;
-  --hair:   #c3cad3;
-  /* Brand colours, used only on hover for their own links. Left at their
-     Michigan/DoorDash values — maize sits at 2.49:1 here, as it did on the
-     parchment, so it reads as a highlight rather than as body text. */
-  --maize:  #c08b00;
-  --dash:   #d01400;
-  /* The footer sentence, as a colour rather than an opacity, so the number
-     inside it can be a different colour at full strength. Re-mixed against the
-     new ground and nudged darker to hold up at 0.75rem. */
-  --muted:  #6e747d;
-  /* Kept as its own token so the dark block can still diverge, but on this
-     ground it resolves to the same blue as --accent. */
-  --accent-ink: #3a6595;
-}
-
-/* Same block twice: once gated on the system preference (skipped when an
-   explicit light choice overrides it), once gated on the explicit dark
-   choice itself. Duplicated rather than shared so each selector stays a
-   single rule the cascade can reorder freely — a combined selector would tie
-   their specificity together for no benefit. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper:  #0a0c0f;
-    --ink:    #e8ecf2;
-    --accent: #7fa8dd;
-    --rule:   #2a3038;
-    --hair:   #1e2329;
-    --maize:  #ffcb05;
-    --dash:   #ff5a3c;
-    --muted:  #84878c;
-    /* Already 7.97:1 on the dark paper, so the link accent serves as-is. */
-    --accent-ink: #7fa8dd;
-  }
-}
-
-:root[data-theme="dark"] {
-  --paper:  #0a0c0f;
-  --ink:    #e8ecf2;
-  --accent: #7fa8dd;
-  --rule:   #2a3038;
-  --hair:   #1e2329;
-  --maize:  #ffcb05;
-  --dash:   #ff5a3c;
-  --muted:  #84878c;
-  --accent-ink: #7fa8dd;
-}
-
-/* Live only for the ~500ms a click on .theme-toggle spends swapping
-   data-theme (added and timed out from there in index.html), so the crossfade
-   doesn't slow down ordinary link/icon hovers the rest of the time. !important
-   is what lets one blanket rule outrun every element's own hover-transition
-   shorthand without having to duplicate this list into each of them. */
-.theme-transitioning,
-.theme-transitioning *,
-.theme-transitioning *::before,
-.theme-transitioning *::after {
-  transition: background-color 0.45s ease, color 0.45s ease,
-    border-color 0.45s ease, fill 0.45s ease, stroke 0.45s ease !important;
+  --paper:  #050403;
+  --ink:    #f0e8d8;
+  --accent: #d4b06a;
+  --rule:   #1c1914;
+  --hair:   #2c261c;
+  --muted:  #7a7368;
 }
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+}
 
 body {
   margin: 0;
@@ -133,10 +83,10 @@ body {
   flex-direction: column;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Figtree", "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 1.15rem;
+  font-family: "Newsreader", "Iowan Old Style", Georgia, serif;
+  font-size: 1.2rem;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -146,7 +96,7 @@ body::before {
   content: "";
   position: fixed;
   inset: var(--frame);
-  border: 2px solid var(--rule);
+  border: 1px solid var(--rule);
   pointer-events: none;
   z-index: 1;
 }
@@ -156,7 +106,7 @@ body::before {
    balanced it looked depended entirely on viewport height: fine on a tall
    desktop window, visibly low in a short wide webview. */
 main {
-  max-width: 36rem;
+  max-width: 34rem;
   /* grows to take up the leftover height, pushing the footer down */
   flex: 1 0 auto;
   display: flex;
@@ -167,11 +117,13 @@ main {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 8vw, 3.5rem);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  margin: 0 0 1.25rem;
+  font-family: "Newsreader Italic Web", "Newsreader", Georgia, serif;
+  font-size: clamp(2.7rem, 8vw, 3.8rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin: 0 0 1.15rem;
 }
 
 /* The name types itself out, backspaces, and retypes in the next face. The
@@ -183,7 +135,7 @@ h1 {
   /* shrink-wrapped so the hover/click target is the name itself, not the
      full width of the heading line */
   width: fit-content;
-  height: 1.05em;
+  height: 1.04em;
   white-space: pre;
 }
 
@@ -203,7 +155,7 @@ h1 {
   width: 0.07em;
   height: 0.78em;
   margin-left: 0.16em;
-  background: var(--accent);
+  background: var(--ink);
   vertical-align: baseline;
 }
 
@@ -254,13 +206,13 @@ h1 {
   .cursor { display: none; }
 }
 
-/* short rule under the name, in the accent */
+/* short rule under the name, in the gold */
 h1::after {
   content: "";
   display: block;
-  width: 2.5rem;
-  height: 2px;
-  margin-top: 1.5rem;
+  width: 1.6rem;
+  height: 1px;
+  margin-top: 1.55rem;
   background: var(--accent);
 }
 
@@ -286,67 +238,10 @@ p:last-child { margin-bottom: 0; }
 
 .views {
   margin: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.03em;
+  font-family: "IBM Plex Mono Web", ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
   color: var(--muted);
-}
-
-/* Pinned to the frame's top-right corner rather than living in .chrome
-   below — the bottom bar has to un-pin on short/narrow viewports because a
-   fixed bottom element sits under the mobile browser's own toolbar, but
-   nothing on this page ever scrolls the top corner out from under an
-   equivalent top bar, so one fixed position covers every size. Boxed at the
-   same 1.8rem footprint as .ring so the two read as one family of controls
-   despite sitting in different corners. The same extra insets .ring sits at
-   in .chrome below (1.4rem horizontal, 0.95rem vertical) are repeated here
-   rather than sitting flush against the frame border itself. */
-.theme-toggle {
-  position: fixed;
-  top: calc(var(--frame) + 0.95rem);
-  right: calc(var(--frame) + 1.4rem);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.8rem;
-  height: 1.8rem;
-  border: 1px solid var(--hair);
-  border-radius: 0.35rem;
-  background: none;
-  padding: 0;
-  color: var(--ink);
-  opacity: 0.4;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.theme-toggle svg { width: 1.05rem; height: 1.05rem; }
-
-/* Only one icon shows at a time: the sun when dark is active (click for
-   light), the moon otherwise — the icon signals the click's destination,
-   not the current state. Mirrors the token blocks above: a media-gated rule
-   for the system default, an attribute-gated rule for the explicit choice. */
-.theme-toggle .icon-sun { display: none; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
-  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
-}
-
-:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-
-/* Same treatment as .ring's hover below: dim until hovered, then to full
-   strength in the accent. */
-@media (hover: hover) {
-  .theme-toggle { opacity: 0.5; }
-
-  .theme-toggle:hover {
-    opacity: 1;
-    color: var(--accent);
-    border-color: var(--accent);
-  }
 }
 
 /* margin-left:auto rather than space-between, so the mark still sits right
@@ -378,63 +273,45 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* No hover on touch, so the mark would otherwise sit dim with no way to
-   brighten it. Hovering takes it to maize, matching the UMich link. */
+   brighten it. Hovering takes it to the gold, the one colour left that
+   is allowed to move. */
 @media (hover: hover) {
   .ring { opacity: 0.4; }
 
   .ring:hover {
     opacity: 1;
-    color: var(--maize);
+    color: var(--accent);
   }
 }
 
-/* The slot the digits arrive into. It is opened before the request resolves,
-   so the sentence around it never reflows, and it clips whatever is inside so
-   the number can start below the line and slide up into view.
-
-   `vertical-align: bottom` is what keeps the figures on the sentence's
-   baseline: an overflow-hidden inline-block has no usable baseline of its own,
-   so it has to be aligned by an edge instead. Since the box is a single line
-   box at the inherited font-size and line-height, its bottom edge and the
-   surrounding strut's bottom edge coincide — and so do the two baselines. */
+/* The slot is sized to the final count before the figures start moving, so
+   "visitor!" never shifts while the number ticks. Overflow stays visible:
+   clipping a zero-width slot made the measure read as empty. */
 .views-n {
   display: inline-block;
-  overflow: hidden;
   vertical-align: bottom;
-  /* The slot opens at roughly three figures and is then set to the count's
-     real width in JS, which the transition below carries. Any fixed reserve
-     would be a guess with an expiry date — 999th needs 4.66ch but 1,000th
-     needs 6.12ch — so instead of picking a number that eventually goes stale,
-     the difference becomes part of the motion: the slot widens as the figures
-     rise into it, and "visitor!" glides across instead of snapping. */
-  width: 3.1ch;
-  /* Same duration and curve as the swoop, so the two read as one movement. */
-  transition: width 320ms cubic-bezier(0.1, 0.86, 0.12, 1);
-  font-weight: 700;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  /* Full strength against the muted sentence, so the number is what the eye
-     goes to — and so the thing that slides in is the thing that stands out. */
-  color: var(--accent-ink);
 }
 
-/* Parked one full line below the slot, i.e. clipped out of sight. */
+/* Wet gold, slightly out of focus, until the count starts. */
 .views-d {
   display: inline-block;
-  transform: translateY(110%);
+  color: var(--accent);
+  filter: blur(3px);
+  opacity: 0;
 }
 
-/* Short, and almost entirely front-loaded: the curve spends its first third
-   covering most of the distance and the rest arresting, so the number reads as
-   having been thrown into place and caught rather than eased in. */
-.views.counted .views-d {
-  animation: swoop 320ms cubic-bezier(0.1, 0.86, 0.12, 1) both;
+.views.counting .views-d {
+  opacity: 1;
+  filter: blur(0);
+  transition: filter 320ms ease, opacity 220ms ease;
 }
 
-@keyframes swoop {
-  from { transform: translateY(110%); opacity: 0; }
-  /* Opaque well before it stops, so the eye reads travel, not a fade. */
-  25%  { opacity: 1; }
-  to   { transform: translateY(0); opacity: 1; }
+/* Hold gold at the final figure, then dry to cream. */
+.views.dry .views-d {
+  color: var(--ink);
+  transition: color 1.1s ease;
 }
 
 /* Nothing came back. Close the slot and retire the sentence instead of leaving
@@ -448,12 +325,16 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
-.views.uncounted .views-n { width: 0; }
+.views.uncounted .views-n { width: 0; overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
-  .views-d { transform: none; }
-  .views.counted .views-d { animation: none; }
-  .views-n { transition: none; }
+  .views-d {
+    filter: none;
+    opacity: 1;
+    color: var(--ink);
+  }
+  .views.counting .views-d,
+  .views.dry .views-d { transition: none; }
 }
 
 .views[hidden] { display: none; }
@@ -470,19 +351,9 @@ a:hover {
   border-bottom-color: var(--accent);
 }
 
-a.umich:hover {
-  color: var(--maize);
-  border-bottom-color: var(--maize);
-}
-
-a.doordash:hover {
-  color: var(--dash);
-  border-bottom-color: var(--dash);
-}
-
 @media (max-width: 34rem) {
   :root { --frame: 0.55rem; --gutter: 2rem; }
-  body { font-size: 1.0625rem; }
+  body { font-size: 1.08rem; }
   /* Symmetric, since main centres its own content now — a viewport-relative
      top offset here would put the imbalance straight back. */
   main { padding: 3rem var(--gutter); }

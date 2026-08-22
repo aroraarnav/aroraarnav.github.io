@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>aroraarnav</title>
 <meta name="description" content="Arnav Arora — studying computer science and mathematics at the University of Michigan.">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://aroraarnav.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arnav Arora">
@@ -20,7 +20,8 @@
 <meta name="twitter:title" content="Arnav Arora">
 <meta name="twitter:description" content="Studying computer science and mathematics at the University of Michigan.">
 <meta name="twitter:image" content="https://aroraarnav.com/og-image.png">
-<link rel="preload" href="fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/newsreader-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">
@@ -41,31 +42,8 @@
   }
 }
 </script>
-<script>
-// Applied before first paint so an explicit choice never flashes the system
-// theme first. Absence of a stored value leaves the attribute off entirely,
-// so the prefers-color-scheme media query in style.css keeps deciding.
-(function () {
-  try {
-    var t = localStorage.getItem("theme");
-    if (t === "light" || t === "dark") {
-      document.documentElement.setAttribute("data-theme", t);
-    }
-  } catch (e) {}
-})();
-</script>
 </head>
 <body>
-
-<button class="theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
-  <svg class="icon-sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-    <circle cx="12" cy="12" r="5"/>
-    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-  </svg>
-  <svg class="icon-moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-  </svg>
-</button>
 
 <main>
 
@@ -73,9 +51,9 @@
 
   <p>
     I&rsquo;m studying computer science and mathematics at the
-    <a class="umich" href="https://cse.engin.umich.edu/">University of Michigan</a>, with interests in
+    <a href="https://cse.engin.umich.edu/">University of Michigan</a>, with interests in
     systems and software engineering. Most recently I worked on DashPass
-    benefits at <a class="doordash" href="https://careersatdoordash.com/engineering-blog/">DoorDash</a>.
+    benefits at <a href="https://careersatdoordash.com/engineering-blog/">DoorDash</a>.
   </p>
 
   <p>
@@ -119,28 +97,31 @@
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   // `size` compensates for faces whose x-height runs small at a shared size —
-  // the old-style italic reads tiny next to the others, VT323 reads large.
+  // Plex Mono reads large, so it is set down; Source Serif and IM Fell
+  // share 1em with Newsreader italic and are shifted onto its baseline.
   // The "Web" suffixes are deliberate: they name the self-hosted subsets in
   // style.css rather than whatever a visitor happens to have installed, so
   // everyone sees the same thing.
-  // `shift` puts every face on Figtree's baseline. Derived from each font's
-  // hhea ascent/descent rather than eyeballed: where the baseline falls in a
-  // fixed line box is (lineHeight - (asc-desc)*size)/2 + asc*size. Note the
-  // values are divided by that face's own `size`, because `top` resolves
-  // against the element's font-size, not the heading's.
+  // `shift` puts every face on Newsreader italic's baseline. Derived from
+  // each font's hhea ascent/descent rather than eyeballed: where the baseline
+  // falls in a fixed line box is (lineHeight - (asc-desc)*size)/2 + asc*size.
+  // Note the values are divided by that face's own `size`, because `top`
+  // resolves against the element's font-size, not the heading's.
   var faces = [
-    { family: '"Figtree", sans-serif',                        weight: 500, spacing: "-0.03em", size: "1em"    },
-    { family: '"JetBrains Mono Web", ui-monospace, monospace', weight: 600, spacing: "-0.05em", size: "0.94em",
-      shift: "0.012em" },
-    { family: '"VT323 Web", ui-monospace, monospace',          weight: 400, spacing: "0.02em",  size: "1.30em",
-      shift: "-0.031em" },
-    { family: '"IM Fell Web", Georgia, serif',                 weight: 400, spacing: "0.01em",  size: "1.00em",
-      style: "italic", shift: "0.079em" }
+    { family: '"Newsreader Italic Web", Georgia, serif',       weight: 400, spacing: "-0.025em", size: "1em",
+      style: "italic" },
+    { family: '"Source Serif Web", Georgia, serif',            weight: 400, spacing: "-0.03em",  size: "1em",
+      style: "italic", shift: "-0.186em" },
+    { family: '"IBM Plex Mono Web", ui-monospace, monospace',  weight: 500, spacing: "-0.04em",  size: "0.82em",
+      shift: "-0.040em" },
+    { family: '"IM Fell Web", Georgia, serif',                 weight: 400, spacing: "0.01em",   size: "1em",
+      style: "italic", shift: "-0.134em" }
   ];
 
   // A webfont isn't fetched until it's applied to rendered text, which would
   // mean a visible fallback flash the first time each face comes up. Warming
-  // them at load costs ~5KB total and removes the flash.
+  // them at load is cheap — the three name subsets are a few KB — and
+  // removes the flash. Plex is already needed for the footer.
   if (document.fonts && document.fonts.load) {
     faces.forEach(function (f) {
       var spec = (f.style || "normal") + " " + f.weight + " 1em " +
@@ -212,52 +193,10 @@
   start();
 })();
 
-// Theme toggle. Explicit choice overrides the system preference and
-// persists; with no choice made yet, it just tracks and displays whichever
-// theme prefers-color-scheme is currently resolving to.
-(function () {
-  var root = document.documentElement;
-  var btn = document.querySelector(".theme-toggle");
-  if (!btn) return;
-
-  var media = window.matchMedia("(prefers-color-scheme: dark)");
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var fadeTimer;
-
-  function effective() {
-    return root.getAttribute("data-theme") || (media.matches ? "dark" : "light");
-  }
-
-  function reflect() {
-    btn.setAttribute("aria-pressed", effective() === "dark" ? "true" : "false");
-  }
-
-  reflect();
-  media.addEventListener("change", reflect);
-
-  btn.addEventListener("click", function () {
-    var next = effective() === "dark" ? "light" : "dark";
-    // The crossfade only runs while this class is present — see style.css —
-    // so it's added right before the swap and timed out afterward, leaving
-    // every other hover transition on the page at its normal fast speed.
-    if (!reduceMotion.matches) {
-      clearTimeout(fadeTimer);
-      root.classList.add("theme-transitioning");
-      fadeTimer = setTimeout(function () {
-        root.classList.remove("theme-transitioning");
-      }, 500);
-    }
-    root.setAttribute("data-theme", next);
-    try { localStorage.setItem("theme", next); } catch (e) {}
-    reflect();
-  });
-})();
-
 // Visit counter. GitHub Pages is static, so the count lives on a hosted
-// counter service. The sentence paints with the rest of the page and holds an
-// empty slot open; only the digits wait on the network, and they slide up into
-// the slot when they land. If the request fails the whole line retires rather
-// than sitting there with a hole in it.
+// counter service. The sentence paints with the rest of the page; when the
+// number lands it ticks up in gold and then dries to cream. If the request
+// fails the whole line retires rather than sitting there with a hole in it.
 (function () {
   var el = document.querySelector(".views");
   if (!el) return;
@@ -281,6 +220,10 @@
   // increment it with a bare request, no page load required. The worker
   // only forwards same-origin fetches (see aroraarnav-visits-gate repo).
 
+  var DUR = 2400;
+  var DRY = 400;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
   // 1st, 2nd, 3rd, 4th — but 11th, 12th, 13th, which is why the teens are
   // checked before the last digit.
   function ordinal(n) {
@@ -289,28 +232,41 @@
     return { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th";
   }
 
+  function label(n) { return n.toLocaleString() + ordinal(n); }
+
+  function land(n) {
+    if (reduceMotion.matches) {
+      digits.textContent = label(n);
+      el.classList.add("counting", "dry");
+      return;
+    }
+    var from = Math.max(1, n - 52);
+    digits.textContent = label(n);
+    slot.style.width = Math.ceil(digits.scrollWidth ||
+      digits.getBoundingClientRect().width) + "px";
+    digits.textContent = label(from);
+    requestAnimationFrame(function () {
+      el.classList.add("counting");
+      var start = performance.now();
+      function frame(now) {
+        var t = Math.min(1, (now - start) / DUR);
+        var eased = 1 - Math.pow(1 - t, 4);
+        digits.textContent = label(Math.round(from + (n - from) * eased));
+        if (t < 1) return requestAnimationFrame(frame);
+        digits.textContent = label(n);
+        setTimeout(function () { el.classList.add("dry"); }, DRY);
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
   fetch(local ? API + "/get" + KEY : "/api/visits")
     .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
     .then(function (d) {
       if (typeof d.value !== "number") return Promise.reject("no value");
-      digits.textContent = d.value.toLocaleString() + ordinal(d.value);
-      // Wait for the face the figures will actually be set in. Measuring
-      // against a fallback would size the slot to the wrong glyph widths, and
-      // the transition would then animate to a width that is visibly off.
-      var ready = (document.fonts && document.fonts.ready) ||
-                  Promise.resolve();
-      return ready.then(function () {
-        // The slot is opened to the count's real width rather than a reserved
-        // guess, so it fits 93rd and 12,345th equally well. The CSS transition
-        // animates the difference in step with the swoop.
-        slot.style.width = digits.getBoundingClientRect().width + "px";
-        // The class drives the CSS animation; the reduced-motion query inside
-        // style.css turns it into a plain appearance.
-        el.classList.add("counted");
-      });
+      land(d.value);
     })
     .catch(function () {
-      // Fold the slot shut and fade the sentence away.
       el.classList.add("uncounted");
     });
 })();
