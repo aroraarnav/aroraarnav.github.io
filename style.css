@@ -285,7 +285,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* The slot is sized to the final count before the figures start moving, so
-   "visitor!" never shifts while the number ticks. Overflow stays visible:
+   "Visits!" never shifts while the number ticks. Overflow stays visible:
    clipping a zero-width slot made the measure read as empty. */
 .views-n {
   display: inline-block;

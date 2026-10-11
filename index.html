@@ -73,7 +73,7 @@
 <footer class="chrome">
   <!-- Starts hidden only so a visitor without JS never sees the sentence with
        a hole in it; the script unhides it synchronously, before first paint. -->
-  <p class="views" hidden>You&rsquo;re the <strong class="views-n"><span class="views-d"></span></strong> visitor!</p>
+  <p class="views" hidden><strong class="views-n"><span class="views-d"></span></strong> Visits!</p>
   <a class="ring" href="https://michigan-webring.vercel.app/"
      target="_blank" rel="noopener noreferrer" aria-label="Michigan webring (opens in a new tab)">
     <!-- Block M, taken from the webring's own logo asset
@@ -224,15 +224,7 @@
   var DRY = 400;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  // 1st, 2nd, 3rd, 4th — but 11th, 12th, 13th, which is why the teens are
-  // checked before the last digit.
-  function ordinal(n) {
-    var teen = n % 100;
-    if (teen >= 11 && teen <= 13) return "th";
-    return { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th";
-  }
-
-  function label(n) { return n.toLocaleString() + ordinal(n); }
+  function label(n) { return n.toLocaleString(); }
 
   function land(n) {
     if (reduceMotion.matches) {
