@@ -1,33 +1,10 @@
-/* Body face. Newsreader's optical size is pinned at 18pt in the file
-   itself — a text cut, not the display one used on the name. */
+/* Body face. Atkinson Hyperlegible, self-hosted.
+   License: fonts/licenses/atkinson-hyperlegible-OFL.txt */
 @font-face {
-  font-family: "Newsreader";
-  src: url("fonts/newsreader.woff2") format("woff2");
+  font-family: "Atkinson Hyperlegible Web";
+  src: url("fonts/atkinsonhyperlegible.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
-}
-
-/* The four display faces the name cycles through. All open-licensed (OFL,
-   copies in fonts/licenses) and self-hosted, because none of them exist on
-   Windows, iOS, or Android — left to the system these fell back to generic
-   serif and the cycle looked broken everywhere but a Mac.
-   Newsreader italic, Source Serif 4 and IM Fell are subset to the seven
-   glyphs in "Arnav Arora". Plex Mono keeps a Latin set so the footer can
-   wear it too. Re-subset the name faces if the heading text ever changes. */
-@font-face {
-  font-family: "Newsreader Italic Web";
-  src: url("fonts/newsreader-italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Source Serif Web";
-  src: url("fonts/sourceserif4-italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
   font-display: swap;
 }
 
@@ -39,15 +16,6 @@
   font-display: swap;
 }
 
-/* Genuinely an italic, so it's declared as one and the script asks for it. */
-@font-face {
-  font-family: "IM Fell Web";
-  src: url("fonts/imfell.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
 :root {
   /* one source of truth for the frame inset — the footer aligns to it */
   --frame:  0.7rem;
@@ -55,8 +23,8 @@
      column whenever it sits in the flow */
   --gutter: 2.75rem;
   --paper:  #050403;
-  --ink:    #f0e8d8;
-  --accent: #d4b06a;
+  --ink:    #fff;
+  --accent: #8fd4ff;
   --rule:   #1c1914;
   --hair:   #2c261c;
   --muted:  #7a7368;
@@ -83,8 +51,8 @@ body {
   flex-direction: column;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Newsreader", "Iowan Old Style", Georgia, serif;
-  font-size: 1.2rem;
+  font-family: "Atkinson Hyperlegible Web", ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
   font-weight: 400;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -117,103 +85,58 @@ main {
 }
 
 h1 {
-  font-family: "Newsreader Italic Web", "Newsreader", Georgia, serif;
-  font-size: clamp(2.7rem, 8vw, 3.8rem);
+  margin: 0 0 2.85rem;
   font-weight: 400;
-  font-style: italic;
-  line-height: 1.04;
-  letter-spacing: -0.025em;
-  margin: 0 0 1.15rem;
+  line-height: 1;
 }
 
-/* The name types itself out, backspaces, and retypes in the next face. The
-   container is a block with a fixed line box so the paragraphs below never
-   move, whatever ascent/descent the current face happens to have — and
-   whitespace is preserved so the trailing space survives mid-word. */
+/* The visible name is the svg. This keeps the words available to assistive
+   tech and to anyone with the drawing turned off. */
 .name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Serif bold italic. Each stroke draws in blue, then eases to white.
+   Kept to the text column so it doesn't span the whole page. */
+.signature {
   display: block;
-  /* shrink-wrapped so the hover/click target is the name itself, not the
-     full width of the heading line */
-  width: fit-content;
-  height: 1.04em;
-  white-space: pre;
+  width: min(100%, 20rem);
+  height: auto;
+  color: var(--accent);
 }
 
-/* Relative so each face can be nudged onto a common baseline. Where the glyph
-   baseline lands inside a fixed line box depends on the font's own ascent and
-   descent, so faces with unusual vertical metrics — old-style italics
-   especially — sit visibly high or low next to the others. `top` shifts the
-   render without touching layout. */
-.typed {
-  position: relative;
+.signature path {
+  stroke: var(--accent);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    write var(--d) linear var(--t) forwards,
+    settle 0.7s ease calc(var(--t) + var(--d)) forwards;
 }
 
-/* Block cursor, only shown once the script has taken over — without JS the
-   name just sits there statically with no stray caret. */
-.cursor {
-  display: none;
-  width: 0.07em;
-  height: 0.78em;
-  margin-left: 0.16em;
-  background: var(--ink);
-  vertical-align: baseline;
+@keyframes write {
+  to { stroke-dashoffset: 0; }
 }
 
-.name.typing .cursor {
-  display: inline-block;
-  animation: caret 1.06s steps(1, end) infinite;
-}
-
-/* Two deliberate blinks to close on. This needs its own keyframe name rather
-   than a lower iteration-count on `caret` — same-named animations keep their
-   original start time, so the count would be measured against a clock that
-   started at page load and could elapse instantly. */
-.name.typing.ending .cursor {
-  animation: caret-end 1.06s steps(1, end) 2 forwards;
-}
-
-/* Once it has settled, hovering wakes the caret back up and clicking replays
-   the whole cycle. Gated on real hover: touch browsers latch :hover onto the
-   last-tapped element, which would leave the caret blinking forever after a
-   tap-to-replay. Tapping still replays — that runs off the click event. */
-.name.done { cursor: pointer; }
-
-@media (hover: hover) {
-  .name.done:hover .cursor {
-    display: inline-block;
-    animation: caret 1.06s steps(1, end) infinite;
-  }
-}
-
-/* Blinks on `visibility`, not `opacity`. Opacity is compositor-animatable, so
-   it promoted the caret to its own layer and the browser expanded that layer
-   to the full-width h1 band — which then rasterized on a separate surface with
-   subtly different color management, tinting the whole heading strip. Most
-   obvious with the word erased, when the caret was all that band contained.
-   `visibility` is discrete, animates on the main thread, and creates no layer;
-   it also holds the caret's box, so nothing reflows as it flashes. */
-@keyframes caret {
-  0%, 50%   { visibility: visible; }
-  50.01%, 100% { visibility: hidden; }
-}
-
-@keyframes caret-end {
-  0%, 50%   { visibility: visible; }
-  50.01%, 100% { visibility: hidden; }
+/* The pen is blue. Each stroke eases to white once it has been drawn. */
+@keyframes settle {
+  to { stroke: var(--ink); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cursor { display: none; }
-}
-
-/* short rule under the name, in the gold */
-h1::after {
-  content: "";
-  display: block;
-  width: 1.6rem;
-  height: 1px;
-  margin-top: 1.55rem;
-  background: var(--accent);
+  .signature path {
+    animation: none;
+    stroke: var(--ink);
+    stroke-dashoffset: 0;
+  }
 }
 
 p {
@@ -273,8 +196,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* No hover on touch, so the mark would otherwise sit dim with no way to
-   brighten it. Hovering takes it to the gold, the one colour left that
-   is allowed to move. */
+   brighten it. Hovering takes it to the blue. */
 @media (hover: hover) {
   .ring { opacity: 0.4; }
 
@@ -284,9 +206,6 @@ p:last-child { margin-bottom: 0; }
   }
 }
 
-/* The slot is sized to the final count before the figures start moving, so
-   "Visits!" never shifts while the number ticks. Overflow stays visible:
-   clipping a zero-width slot made the measure read as empty. */
 .views-n {
   display: inline-block;
   vertical-align: bottom;
@@ -294,24 +213,15 @@ p:last-child { margin-bottom: 0; }
   font-variant-numeric: tabular-nums;
 }
 
-/* Wet gold, slightly out of focus, until the count starts. */
+/* The count fades in once, already in cream, and then sits. */
 .views-d {
   display: inline-block;
-  color: var(--accent);
-  filter: blur(3px);
   opacity: 0;
 }
 
 .views.counting .views-d {
   opacity: 1;
-  filter: blur(0);
-  transition: filter 320ms ease, opacity 220ms ease;
-}
-
-/* Hold gold at the final figure, then dry to cream. */
-.views.dry .views-d {
-  color: var(--ink);
-  transition: color 1.1s ease;
+  transition: opacity 0.8s ease;
 }
 
 /* Nothing came back. Close the slot and retire the sentence instead of leaving
@@ -328,13 +238,8 @@ p:last-child { margin-bottom: 0; }
 .views.uncounted .views-n { width: 0; overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
-  .views-d {
-    filter: none;
-    opacity: 1;
-    color: var(--ink);
-  }
-  .views.counting .views-d,
-  .views.dry .views-d { transition: none; }
+  .views-d { opacity: 1; }
+  .views.counting .views-d { transition: none; }
 }
 
 .views[hidden] { display: none; }
@@ -353,7 +258,7 @@ a:hover {
 
 @media (max-width: 34rem) {
   :root { --frame: 0.55rem; --gutter: 2rem; }
-  body { font-size: 1.08rem; }
+  body { font-size: 1rem; }
   /* Symmetric, since main centres its own content now — a viewport-relative
      top offset here would put the imbalance straight back. */
   main { padding: 3rem var(--gutter); }
