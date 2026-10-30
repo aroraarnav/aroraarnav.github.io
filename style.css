@@ -218,13 +218,13 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* No hover on touch, so the mark would otherwise sit dim with no way to
-   brighten it. Hovering takes it to the blue. */
+   brighten it. Hovering takes it to maize. */
 @media (hover: hover) {
   .ring { opacity: 0.4; }
 
   .ring:hover {
     opacity: 1;
-    color: var(--accent);
+    color: #f5c300;
   }
 }
 
@@ -292,6 +292,16 @@ a {
 
 a:hover {
   border-bottom-color: var(--accent);
+}
+
+a.umich:hover {
+  color: #f5c300;
+  border-bottom-color: #f5c300;
+}
+
+a.doordash:hover {
+  color: #ff3008;
+  border-bottom-color: #ff3008;
 }
 
 @media (max-width: 34rem) {
