@@ -116,6 +116,7 @@ h1 {
 
 .signature path {
   stroke: var(--ink);
+  stroke-linecap: butt;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: write var(--d) linear var(--t) forwards;
@@ -126,10 +127,14 @@ h1 {
   isolation: isolate;
 }
 
+/* Hidden until that stroke's own turn. A round cap would otherwise paint a
+   blue dot at the start of every stroke still waiting to be drawn. */
 .signature .pen path {
   stroke: var(--accent);
+  stroke-linecap: butt;
+  opacity: 0;
   animation:
-    write var(--d) linear var(--t) forwards,
+    draw var(--d) linear var(--t) forwards,
     vanish 0.4s linear calc(var(--t) + var(--d)) forwards;
 }
 
@@ -137,7 +142,13 @@ h1 {
   to { stroke-dashoffset: 0; }
 }
 
+@keyframes draw {
+  0% { opacity: 1; stroke-dashoffset: 1; }
+  100% { opacity: 1; stroke-dashoffset: 0; }
+}
+
 @keyframes vanish {
+  from { opacity: 1; }
   to { opacity: 0; }
 }
 
