@@ -168,12 +168,13 @@
 <script>
 // Visit counter. GitHub Pages is static, so the count lives on a hosted
 // counter service. The sentence paints with the rest of the page; when the
-// number lands it fades in once. If the request fails the whole line retires
-// rather than sitting there with a hole in it.
+// number lands it ticks up in blue and then settles to white. If the request
+// fails the whole line retires rather than sitting there with a hole in it.
 (function () {
   var el = document.querySelector(".views");
   if (!el) return;
 
+  var slot = el.querySelector(".views-n");
   var digits = el.querySelector(".views-d");
   // Synchronous, so this happens in the same frame as first paint — the
   // `hidden` attribute in the markup is only there for the no-JS case.
@@ -192,19 +193,35 @@
   // increment it with a bare request, no page load required. The worker
   // only forwards same-origin fetches (see aroraarnav-visits-gate repo).
 
+  var DUR = 2400;
+  var DRY = 400;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   function label(n) { return n.toLocaleString(); }
 
   function land(n) {
-    digits.textContent = label(n);
     if (reduceMotion.matches) {
-      el.classList.add("counting");
+      digits.textContent = label(n);
+      el.classList.add("counting", "dry");
       return;
     }
-    // Paint the hidden state first so the fade actually runs.
+    var from = Math.max(1, n - 52);
+    digits.textContent = label(n);
+    slot.style.width = Math.ceil(digits.scrollWidth ||
+      digits.getBoundingClientRect().width) + "px";
+    digits.textContent = label(from);
     requestAnimationFrame(function () {
-      requestAnimationFrame(function () { el.classList.add("counting"); });
+      el.classList.add("counting");
+      var start = performance.now();
+      function frame(now) {
+        var t = Math.min(1, (now - start) / DUR);
+        var eased = 1 - Math.pow(1 - t, 4);
+        digits.textContent = label(Math.round(from + (n - from) * eased));
+        if (t < 1) return requestAnimationFrame(frame);
+        digits.textContent = label(n);
+        setTimeout(function () { el.classList.add("dry"); }, DRY);
+      }
+      requestAnimationFrame(frame);
     });
   }
 

@@ -228,6 +228,8 @@ p:last-child { margin-bottom: 0; }
   }
 }
 
+/* The slot is sized to the final count before the figures start moving, so
+   "Visits!" never shifts while the number ticks. */
 .views-n {
   display: inline-block;
   vertical-align: bottom;
@@ -235,15 +237,24 @@ p:last-child { margin-bottom: 0; }
   font-variant-numeric: tabular-nums;
 }
 
-/* The count fades in once, already in cream, and then sits. */
+/* Soft blue, slightly out of focus, until the count starts. */
 .views-d {
   display: inline-block;
+  color: var(--accent);
+  filter: blur(3px);
   opacity: 0;
 }
 
 .views.counting .views-d {
   opacity: 1;
-  transition: opacity 0.8s ease;
+  filter: blur(0);
+  transition: filter 320ms ease, opacity 220ms ease;
+}
+
+/* Hold the blue at the final figure, then settle to white. */
+.views.dry .views-d {
+  color: var(--ink);
+  transition: color 1.1s ease;
 }
 
 /* Nothing came back. Close the slot and retire the sentence instead of leaving
@@ -260,8 +271,13 @@ p:last-child { margin-bottom: 0; }
 .views.uncounted .views-n { width: 0; overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
-  .views-d { opacity: 1; }
-  .views.counting .views-d { transition: none; }
+  .views-d {
+    filter: none;
+    opacity: 1;
+    color: var(--ink);
+  }
+  .views.counting .views-d,
+  .views.dry .views-d { transition: none; }
 }
 
 .views[hidden] { display: none; }
