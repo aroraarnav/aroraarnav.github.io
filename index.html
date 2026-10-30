@@ -114,6 +114,18 @@
       <path pathLength="1" d="M170.35 9.00 L168.35 12.00 L167.35 15.00 L167.35 18.00 L168.35 20.00" style="--d:0.033s;--t:2.523s"/>
       <path pathLength="1" d="M172.35 8.00 L170.35 10.00 L169.35 12.00 L168.35 15.00 L168.35 18.00 L169.35 21.00 L170.35 22.00" style="--d:0.044s;--t:2.556s"/>
     </svg>
+    <script>
+    (function () {
+      var svg = document.querySelector(".signature");
+      if (!svg || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var pen = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      pen.setAttribute("class", "pen");
+      svg.querySelectorAll("path").forEach(function (path) {
+        pen.appendChild(path.cloneNode(true));
+      });
+      svg.appendChild(pen);
+    })();
+    </script>
   </h1>
 
   <p>

@@ -104,31 +104,41 @@ h1 {
   border: 0;
 }
 
-/* Serif bold italic. Each stroke draws in blue, then eases to white.
-   Kept to the text column so it doesn't span the whole page. */
+/* Serif bold italic. The letter is drawn in white. A blue copy of the same
+   strokes sits on top and fades all the way out, so the pen color cannot
+   leave a fringe behind on the phone. */
 .signature {
   display: block;
   width: min(100%, 20rem);
   height: auto;
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .signature path {
-  stroke: var(--accent);
+  stroke: var(--ink);
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
+  animation: write var(--d) linear var(--t) forwards;
+}
+
+.signature .pen {
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.signature .pen path {
+  stroke: var(--accent);
   animation:
     write var(--d) linear var(--t) forwards,
-    settle 0.7s ease calc(var(--t) + var(--d)) forwards;
+    vanish 0.4s linear calc(var(--t) + var(--d)) forwards;
 }
 
 @keyframes write {
   to { stroke-dashoffset: 0; }
 }
 
-/* The pen is blue. Each stroke eases to white once it has been drawn. */
-@keyframes settle {
-  to { stroke: var(--ink); }
+@keyframes vanish {
+  to { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -137,6 +147,7 @@ h1 {
     stroke: var(--ink);
     stroke-dashoffset: 0;
   }
+  .signature .pen { display: none; }
 }
 
 p {
