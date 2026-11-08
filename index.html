@@ -20,7 +20,7 @@
 <meta name="twitter:title" content="Arnav Arora">
 <meta name="twitter:description" content="Studying computer science and mathematics at the University of Michigan.">
 <meta name="twitter:image" content="https://aroraarnav.com/og-image.png">
-<link rel="preload" href="fonts/atkinsonhyperlegible.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">
@@ -118,12 +118,26 @@
     (function () {
       var svg = document.querySelector(".signature");
       if (!svg || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      var pen = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      var NS = "http://www.w3.org/2000/svg";
+      // Blue halo for the pen: blurred copies only, layered behind the
+      // white ink so the glow sits around the letters, never over them.
+      var defs = document.createElementNS(NS, "defs");
+      defs.innerHTML =
+        '<filter id="pen-glow" x="-15%" y="-120%" width="130%" height="340%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="s"/>' +
+        '<feComponentTransfer in="s" result="soft"><feFuncA type="linear" slope="1.6"/></feComponentTransfer>' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="0.9" result="h"/>' +
+        '<feComponentTransfer in="h" result="halo"><feFuncA type="linear" slope="2.6"/></feComponentTransfer>' +
+        '<feMerge><feMergeNode in="soft"/><feMergeNode in="halo"/></feMerge>' +
+        '</filter>';
+      svg.appendChild(defs);
+      var pen = document.createElementNS(NS, "g");
       pen.setAttribute("class", "pen");
+      pen.setAttribute("filter", "url(#pen-glow)");
       svg.querySelectorAll("path").forEach(function (path) {
         pen.appendChild(path.cloneNode(true));
       });
-      svg.appendChild(pen);
+      svg.insertBefore(pen, svg.querySelector("path"));
     })();
     </script>
   </h1>
