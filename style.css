@@ -1,8 +1,8 @@
-/* Body face. Geist, self-hosted (latin subset).
-   License: fonts/licenses/geist-OFL.txt */
+/* Body face. Newsreader, self-hosted (latin subset, optical-size axis).
+   License: fonts/licenses/newsreader-OFL.txt */
 @font-face {
-  font-family: "Geist Web";
-  src: url("fonts/geist.woff2") format("woff2");
+  font-family: "Newsreader Web";
+  src: url("fonts/newsreader.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -51,10 +51,10 @@ body {
   flex-direction: column;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Geist Web", ui-sans-serif, system-ui, sans-serif;
-  font-size: 1rem;
+  font-family: "Newsreader Web", ui-serif, Georgia, serif;
+  font-size: 1.1875rem;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -307,7 +307,7 @@ a.doordash:hover {
 
 @media (max-width: 34rem) {
   :root { --frame: 0.55rem; --gutter: 2rem; }
-  body { font-size: 0.9375rem; }
+  body { font-size: 1.125rem; }
   /* Symmetric, since main centres its own content now — a viewport-relative
      top offset here would put the imbalance straight back. */
   main { padding: 3rem var(--gutter); }
